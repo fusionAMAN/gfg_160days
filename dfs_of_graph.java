@@ -1,39 +1,8 @@
+
 //{ Driver Code Starts
 // Initial Template for Java
 import java.io.*;
 import java.util.*;
-
-
-// } Driver Code Ends
-
-// User function Template for Java
-class Solution {
-    // Function to return Breadth First Search Traversal of given graph.
-    public ArrayList<Integer> bfs(ArrayList<ArrayList<Integer>> adj) {
-        // code here
-        ArrayList<Integer>ans=new ArrayList<>();
-        int n=adj.size();
-        boolean[]vis=new boolean[n];
-        Queue<Integer>que=new LinkedList<>();
-        que.add(0);
-        vis[0]=true;
-        // ans.add(0);
-        while(!que.isEmpty()){
-            int c=que.poll();
-            ans.add(c);
-            for(int neigh:adj.get(c)){
-                if(!vis[neigh]){
-                    vis[neigh]=true;
-                    que.add(neigh);
-                }
-            }
-        }
-        return ans;
-    }
-}
-
-
-//{ Driver Code Starts.
 
 class GFG {
     public static void main(String[] args) throws IOException {
@@ -56,7 +25,7 @@ class GFG {
             }
 
             Solution obj = new Solution();
-            ArrayList<Integer> ans = obj.bfs(adj);
+            ArrayList<Integer> ans = obj.dfs(adj);
             for (int num : ans) {
                 System.out.print(num + " ");
             }
@@ -67,3 +36,27 @@ class GFG {
 }
 
 // } Driver Code Ends
+
+
+class Solution {
+    // Function to return a list containing the DFS traversal of the graph.
+    public ArrayList<Integer> dfs(ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        ArrayList<Integer>res=new ArrayList<>();
+        boolean vis[]=new boolean[adj.size()];
+        helper(0,adj,vis,res);
+        return res;
+    }
+    public void helper(int node, ArrayList<ArrayList<Integer>> adj, boolean vis[], ArrayList<Integer>res){
+        // ArrayList<Integer>res=new ArrayList<>();
+        vis[node]=true;
+        res.add(node);
+        for(int n:adj.get(node)){
+            if(!vis[n]){
+                helper(n,adj,vis,res);
+            }
+        }
+        // return res;
+    }
+    
+}
