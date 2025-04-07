@@ -1,78 +1,71 @@
-class Solution {
-    public boolean isCycle(int V, int[][] edges) {
-        // Create adjacency list
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-        for (int i = 0; i < V; i++) {
-            adj.add(new ArrayList<>());
-        }
+//{ Driver Code Starts
+import java.io.*;
+import java.util.*;
 
-        // Convert edge list to adjacency list
-        for (int[] edge : edges) {
-            adj.get(edge[0]).add(edge[1]);
-        }
-
-        boolean[] visited = new boolean[V];
-        boolean[] recursionStack = new boolean[V];
-
-        // Check for cycles in all components
-        for (int i = 0; i < V; i++) {
-            if (!visited[i]) {
-                if (dfs(i, adj, visited, recursionStack)) {
-                    return true; // cycle found
-                }
+class GFG {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int tc = sc.nextInt();
+        while (tc-- > 0) {
+            int V = sc.nextInt();
+            int E = sc.nextInt();
+            int[][] edges = new int[E][2];
+            for (int i = 0; i < E; i++) {
+                edges[i][0] = sc.nextInt();
+                edges[i][1] = sc.nextInt();
             }
+
+            Solution obj = new Solution();
+            boolean ans = obj.isCyclic(V, edges);
+            System.out.println(ans ? "true" : "false");
         }
-
-        return false; // no cycle found
-    }
-
-    public boolean dfs(int node, ArrayList<ArrayList<Integer>> adj, boolean[] visited, boolean[] recursionStack) {
-        visited[node] = true;
-        recursionStack[node] = true;
-
-        for (int neighbor : adj.get(node)) {
-            if (!visited[neighbor]) {
-                if (dfs(neighbor, adj, visited, recursionStack)) {
-                    return true;
-                }
-            } else if (recursionStack[neighbor]) {
-                return true; // back edge found
-            }
-        }
-
-        recursionStack[node] = false;
-        return false;
+        sc.close();
     }
 }
+// } Driver Code Ends
+
+
 class Solution {
-    public boolean isCycle(int V, int[][] edges) {
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-        for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
-
-        // For undirected graph, add both directions
-        for (int[] edge : edges) {
-            adj.get(edge[0]).add(edge[1]);
-            adj.get(edge[1]).add(edge[0]);
+    public boolean isCyclic(int V, int[][] edges) {
+        // code here
+        ArrayList<ArrayList<Integer>>adj=new ArrayList<>();
+        for(int i=0;i<V;i++){
+            adj.add(new ArrayList<>());
         }
-
-        boolean[] visited = new boolean[V];
-        for (int i = 0; i < V; i++) {
-            if (!visited[i]) {
-                if (dfs(i, -1, visited, adj)) return true;
+        for(int []edge:edges){
+            int u=edge[0];
+            int v=edge[1];
+            adj.get(u).add(v);
+        }
+        int[]indegree=new int[V];
+        for(int u=0;u<V;u++){
+            for(int v:adj.get(u)){
+                indegree[v]++;
             }
         }
-        return false;
-    }
-
-    private boolean dfs(int node, int parent, boolean[] visited, ArrayList<ArrayList<Integer>> adj) {
-        visited[node] = true;
-        for (int neighbor : adj.get(node)) {
-            if (!visited[neighbor]) {
-                if (dfs(neighbor, node, visited, adj)) return true;
-            } else if (neighbor != parent) {
-                return true; // Cycle found
+        Queue<Integer>que=new LinkedList<>();
+        
+        for(int i=0;i<V;i++){
+            if(indegree[i]==0){
+                que.add(i);
             }
         }
-        return false;
+        int count=0;
+        while(!que.isEmpty()){
+            int u=que.poll();
+            count++;
+            for(int v:adj.get(u)){
+                indegree[v]--;
+                if(indegree[v]==0)que.add(v);
+            }
+        
+        }
+        
+        return count!=V;
+        /*count keeps track of how many nodes you've processed during the topological sort.
+
+If the graph has no cycles, you should be able to process all V nodes.
+
+If there's a cycle, some nodes will never reach in-degree = 0, so they won’t be processed. */
     }
 }
