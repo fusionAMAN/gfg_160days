@@ -69,8 +69,9 @@ class Solution {
         int []dist=new int[V];
         Arrays.fill(dist, Integer.MAX_VALUE);
         // Min-heap priority queue: stores (distance, node)
-        PriorityQueue<int[]>pq=new PriorityQueue<>();
+        PriorityQueue<int[]>pq=new PriorityQueue<>((a,b)->a[0]-b[0]);
         pq.add(new int[]{0,src});
+        dist[src]=0;
         while(pq.isEmpty()){
             int[]curr=pq.poll();
             int currdist=curr[0];
