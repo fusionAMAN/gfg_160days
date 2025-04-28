@@ -11,7 +11,7 @@ public class ksizedsubarraymax {
             }
             
             // Remove elements smaller than the current element from the back
-            while (!dq.isEmpty() && arr[i] >= arr[dq.peekLast()) {
+            while (!dq.isEmpty() && arr[i] >= arr[dq.peekLast()]) {
                 dq.pollLast();
             }
             
